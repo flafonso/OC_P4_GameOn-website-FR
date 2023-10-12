@@ -12,6 +12,8 @@ const modalbg = document.querySelector(".bground");
 const modalBtn = document.querySelectorAll(".modal-btn");
 const formData = document.querySelectorAll(".formData");
 const closeBtn = document.querySelector(".close");
+const successMessage = document.querySelector(".success-message");
+const successBtn = document.querySelector(".btn-success");
 
 
 // launch modal event
@@ -26,6 +28,17 @@ function launchModal() {
 // close modal form
 function closeModal() {
   modalbg.style.display = "none";
+}
+
+// hides the form and displays the success message
+function successfulSubmit() {
+  document.forms["reserve"].style.display = "none";
+  closeBtn.style.display = "none";
+  successMessage.style.display = "block";
+  successBtn.style.display = "block";
+  successBtn.addEventListener("click", () => {
+    document.forms["reserve"].submit();
+  });
 }
 
 
@@ -170,6 +183,6 @@ function validate(event) {
 
   // submit to the server if the form is valid
   if (form.valid) {
-    document.forms["reserve"].submit();
+    successfulSubmit();
   }
 }

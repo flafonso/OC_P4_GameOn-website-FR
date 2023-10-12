@@ -527,3 +527,27 @@ footer {
   }
 }
 
+/* For the message confirming the reservation */
+.success-message {
+  display: none;
+  color: #03a711;
+  font-weight: bold;
+  margin-top: 10px;
+  margin-bottom: 30px;
+}
+
+.btn-success {
+  display: none;
+  background: #01c411;
+  margin: 0 auto;
+  border-radius: 7px;
+  font-size: 1rem;
+  padding: 12px 82px;
+  color: #fff;
+  cursor: pointer;
+  border: 0;
+}
+
+.btn-success:hover {
+  background: #03990f;
+}
