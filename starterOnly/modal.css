@@ -68,39 +68,6 @@ img {
   display: none;
 }
 
-@media screen and (max-width: 768px) {
-  .topnav a {display: none;}
-  .topnav a.icon {
-    float: right;
-    display: block;
-  }
-}
-
-@media screen and (max-width: 768px) {
-  .topnav.responsive {position: relative;}
-  .topnav.responsive .icon {
-    position: absolute;
-    right: 0;
-    top: 0;
-  }
-  .topnav.responsive a {
-    float: none;
-    display: block;
-    text-align: left;
-  }
-}
-
-
-
- @media screen and (max-width: 540px) {
-  .topnav a {display: none;}
-  .topnav a.icon {
-    float: right;
-    display: block;
-    margin-top: -15px;
-  }
-} 
-
 main {
   font-size: 130%;
   font-weight: bolder;
@@ -173,6 +140,7 @@ main {
   margin: 5% auto;
   width: 100%;
   max-width: 500px;
+  min-height: 748px;
   animation-name: modalopen;
   animation-duration: var(--modal-duration);
   background: #232323;
@@ -215,7 +183,7 @@ input {
   display: block;
   margin-top: 7px;
   margin-bottom: 7px;
-  text-align: right;
+  /* text-align: right; */
   line-height: 0.3;
   opacity: 0;
   transition: 0.3s;
@@ -332,6 +300,7 @@ input[data-error]::after {
   color: #fff;
   cursor: pointer;
   border: 0;
+  margin-top: 20px;
 }
 /* custom select styles */
 .custom-select {
@@ -527,27 +496,53 @@ footer {
   }
 }
 
-/* For the message confirming the reservation */
-.success-message {
-  display: none;
-  color: #03a711;
-  font-weight: bold;
-  margin-top: 10px;
-  margin-bottom: 30px;
+.success-text {
+  font-size: 36px;
+  text-align: center;
 }
 
-.btn-success {
-  display: none;
-  background: #01c411;
-  margin: 0 auto;
-  border-radius: 7px;
-  font-size: 1rem;
-  padding: 12px 82px;
-  color: #fff;
-  cursor: pointer;
-  border: 0;
+@media screen and (max-width: 768px) {
+  .topnav a {display: none;}
+  .topnav a.icon {
+    float: right;
+    display: block;
+  }
 }
 
-.btn-success:hover {
-  background: #03990f;
+@media screen and (max-width: 768px) {
+  .topnav.responsive {position: relative;}
+  .topnav.responsive .icon {
+    position: absolute;
+    right: 0;
+    top: 0;
+  }
+  .topnav.responsive a {
+    float: none;
+    display: block;
+    text-align: left;
+  }
 }
+
+
+
+ @media screen and (max-width: 540px) {
+  .topnav a {display: none;}
+  .topnav a.icon {
+    float: right;
+    display: block;
+    margin-top: -15px;
+  }
+
+  .content {
+    min-height: 648px;
+    border-radius: 10px 10px 0px 0px;
+  }
+  label {
+    font-size: 14px;
+  }
+  .btn-submit {
+    font-size: 14px;
+    padding: 7px 42px;
+  }
+  /* ici */
+} 

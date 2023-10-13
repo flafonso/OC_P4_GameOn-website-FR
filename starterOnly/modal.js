@@ -12,8 +12,8 @@ const modalbg = document.querySelector(".bground");
 const modalBtn = document.querySelectorAll(".modal-btn");
 const formData = document.querySelectorAll(".formData");
 const closeBtn = document.querySelector(".close");
-const successMessage = document.querySelector(".success-message");
-const successBtn = document.querySelector(".btn-success");
+const submitBtn = document.querySelector(".btn-submit");
+const textLabel = document.querySelector(".text-label");
 
 
 // launch modal event
@@ -32,11 +32,26 @@ function closeModal() {
 
 // hides the form and displays the success message
 function successfulSubmit() {
-  document.forms["reserve"].style.display = "none";
-  closeBtn.style.display = "none";
-  successMessage.style.display = "block";
-  successBtn.style.display = "block";
-  successBtn.addEventListener("click", () => {
+  // change DOM element of the modal*********
+  for(let i = 0; i < formData.length; i++) {
+    formData[i].hidden = true;
+  }
+  document.forms["reserve"].style.minHeight = "748px";
+  document.forms["reserve"].style.display = "flex";
+  document.forms["reserve"].style.flexDirection = "column";
+  textLabel.innerHTML = "Merci pour<br>votre inscription";
+  textLabel.classList.toggle("success-text");
+  submitBtn.value = "Fermer";
+  textLabel.style.marginTop = "auto";
+  submitBtn.style.marginTop = "auto";
+  //******************************************
+  // complete the submit
+  submitBtn.addEventListener("click", () => {
+    closeModal();
+    document.forms["reserve"].submit();
+  });
+  closeBtn.addEventListener("click", () => {
+    closeModal();
     document.forms["reserve"].submit();
   });
 }
