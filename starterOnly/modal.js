@@ -101,7 +101,7 @@ const form = {
       return this.element.value.trim();
     },
     get valid() {
-      let regexEmail = new RegExp("[a-z0-9._-]+@[a-z0-9._-]+\.[a-z0-9._-]+");
+      let regexEmail = new RegExp("^(\"(?:[!#-\[\]-~]|\\[\t -~])*\"|[!#-'*+\-/-9=?A-Z\^-~](?:\.?[!#-'*+\-/-9=?A-Z\^-~])*)@([!#-'*+\-/-9=?A-Z\^-~](?:\.?[!#-'*+\-/-9=?A-Z\^-~])*|\[[!-Z\^-~]*\])$");
       if (isEmpty(this.value) || !regexEmail.test(this.value)) {
         this.message = "Veuillez entrer une adresse email valide.";
         return false;
