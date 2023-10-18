@@ -66,6 +66,7 @@ img {
 
 .topnav .icon {
   display: none;
+  color: #ff0000;
 }
 
 main {
@@ -507,14 +508,15 @@ footer {
     float: right;
     display: block;
   }
-}
 
-@media screen and (max-width: 768px) {
   .topnav.responsive {position: relative;}
-  .topnav.responsive .icon {
+  .topnav.responsive .icon { 
     position: absolute;
     right: 0;
     top: 0;
+    background-color: #ff0000;
+    color: #ffffff;
+    border-radius: 15px;
   }
   .topnav.responsive a {
     float: none;
@@ -526,12 +528,7 @@ footer {
 
 
  @media screen and (max-width: 540px) {
-  .topnav a {display: none;}
-  .topnav a.icon {
-    float: right;
-    display: block;
-    margin-top: -15px;
-  }
+  /* .topnav a {display: none;} */
 
   .content {
     min-height: 648px;
@@ -544,5 +541,4 @@ footer {
     font-size: 14px;
     padding: 7px 42px;
   }
-  /* ici */
 } 
