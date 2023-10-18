@@ -10,6 +10,7 @@ function editNav() {
 // DOM Elements
 const modalbg = document.querySelector(".bground");
 const modalBtn = document.querySelectorAll(".modal-btn");
+const formEl = document.forms["reserve"];
 const formData = document.querySelectorAll(".formData");
 const closeBtn = document.querySelector(".close");
 const submitBtn = document.querySelector(".btn-submit");
@@ -21,53 +22,51 @@ modalBtn.forEach((btn) => btn.addEventListener("click", launchModal));
 // close modal event
 closeBtn.addEventListener("click", closeModal);
 
-// launch modal form
+/**
+ * launch modal form
+ */
 function launchModal() {
   modalbg.style.display = "block";
 }
-// close modal form
+
+/**
+ * Close modal form
+ */
 function closeModal() {
+  console.log("closeModal()");
   modalbg.style.display = "none";
-}
-
-// hides the form and displays the success message
-function successfulSubmit() {
-  // change DOM element of the modal*********
-  for(let i = 0; i < formData.length; i++) {
-    formData[i].hidden = true;
-  }
-  document.forms["reserve"].style.minHeight = "748px";
-  document.forms["reserve"].style.display = "flex";
-  document.forms["reserve"].style.flexDirection = "column";
-  textLabel.innerHTML = "Merci pour<br>votre inscription";
-  textLabel.classList.toggle("success-text");
-  submitBtn.value = "Fermer";
-  textLabel.style.marginTop = "auto";
-  submitBtn.style.marginTop = "auto";
-  //******************************************
-  // complete the submit
-  submitBtn.addEventListener("click", () => {
-    closeModal();
-    document.forms["reserve"].submit();
-  });
-  closeBtn.addEventListener("click", () => {
-    closeModal();
-    document.forms["reserve"].submit();
-  });
+  form.emptyAll();
 }
 
 
+
+
 // ********************************************************************************
-// Validation part !
+// Validation form part
 // ********************************************************************************
+/**
+ * Returns true if value is empty and false otherwise
+ * @param { String } value
+ * @returns { Boolean }
+ */
 function isEmpty(value) {
   return value === "" ? true : false;
 }
+
+/**
+ * Returns true if length is between min and max, returns false otherwise
+ * @param { Number } length
+ * @param { Number } min
+ * @param { Number } max
+ * @returns { Boolean }
+ */
 function isBetween(length, min, max) {
   return   min > length || length > max ? false : true;
 }
 
-// A "form" object that manages the validation of form fields and the display of errors.
+/**
+ * A "form" object that manages the validation of form fields and the display of errors.
+ */
 const form = {
   firstName : {
     element : document.querySelector("#first"),
@@ -173,7 +172,7 @@ const form = {
     let isValid = true;
 
     for (const key in this) {
-      if (this.hasOwnProperty(key) && key !== "valid") {
+      if (this.hasOwnProperty(key) && key !== "valid" && key !== "emptyAll") {
         // console.log(`key = ${key}, => ${key}.valid = ${this[key].valid}`);
         const field = this[key];
 
@@ -191,13 +190,116 @@ const form = {
     }
     return isValid; // If all internal properties are valid, "valid" is true
   },
+  emptyAll() {
+    for(const key in this) {
+      if (this.hasOwnProperty(key) && key !== "valid" && key !== "emptyAll") {
+        const field = this[key];
+
+        delete field.element.parentElement.dataset.error;
+        delete field.element.parentElement.dataset.errorVisible;
+      }
+    }
+    document.forms["reserve"].reset();
+  }
+}
+// ********************************************************************************
+// End of validation form part
+// ********************************************************************************
+
+/**
+ * Hides all .formData elements if status === true and displays them if === false
+ * @param { Boolean } status
+ */
+function displayFormData(status) {
+  for(let i = 0; i < formData.length; i++) {
+    formData[i].hidden = status;
+    // formData[i].style.visibility = "hidden";
+  }
 }
 
+/**
+ * Modifies the style of the form and changes the content of textLabel to display the thank-you message
+ */
+function showMessage() {
+  formEl.style.minHeight = "748px";
+  formEl.style.display = "flex";
+  formEl.style.flexDirection = "column";
+  textLabel.innerHTML = "Merci pour<br>votre inscription";
+  // textLabel.classList.toggle("success-text");
+  textLabel.classList.add("success-text");
+}
+
+/**
+ * Restores default form style and default textLabel content
+ */
+function hideMessage() {
+  formEl.style.removeProperty("min-height");
+  formEl.style.display = "block";
+  formEl.style.removeProperty("flex-direction");
+  textLabel.innerHTML = "A quel tournoi souhaitez-vous participer cette année ?";
+  // textLabel.classList.toggle("success-text");
+  textLabel.classList.remove("success-text");
+}
+
+/**
+ * Changes the style and behavior of the modal's buttons, to match its state
+ */
+function btnsInMessage() {
+  submitBtn.value = "Fermer";
+  setTimeout(() => {
+    submitBtn.type = "button";
+    submitBtn.onclick = () => {
+      closeModal();
+      switchToForm();
+    };
+  }, 100);
+  closeBtn.addEventListener("click", switchToForm);
+  textLabel.style.marginTop = "auto";
+  submitBtn.style.marginTop = "auto";
+}
+
+/**
+ * Resets the style and behavior of modal buttons to default
+ */
+function btnsInForm() {
+  submitBtn.onclick = null;
+  submitBtn.value = "C'est parti";
+  textLabel.style.removeProperty("margin-top");
+  submitBtn.style.marginTop = "20px";
+  setTimeout(() => {
+    submitBtn.type = "submit";
+  }, 100);
+  closeBtn.removeEventListener("click", switchToForm);
+}
+
+/**
+ * Calls the functions that will display the form in the modal
+ */
+function switchToForm() {
+  displayFormData(false); // true for hide, false for show
+  hideMessage();
+  btnsInForm();
+}
+
+/**
+ * Calls up the functions that will display the thank-you message
+ */
+function switchToMessage() {
+  displayFormData(true); // true for hide, false for show
+  showMessage();
+  btnsInMessage();
+}
+
+/**
+ * Launches form validation and accompanying status changes
+ * @param {*} event
+ * @returns
+ */
 function validate(event) {
   event.preventDefault();
 
-  // submit to the server if the form is valid
   if (form.valid) {
-    successfulSubmit();
+    switchToMessage();
   }
+  return console.log("validate fini");
 }
