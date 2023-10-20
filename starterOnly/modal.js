@@ -14,13 +14,23 @@ const formEl = document.forms["reserve"];
 const formData = document.querySelectorAll(".formData");
 const closeBtn = document.querySelector(".close");
 const submitBtn = document.querySelector(".btn-submit");
+const finishBtn = document.querySelector(".btn-finish");
 const textLabel = document.querySelector(".text-label");
 
+// submitBtn.addEventListener("click", validate);
 
 // launch modal event
 modalBtn.forEach((btn) => btn.addEventListener("click", launchModal));
 // close modal event
 closeBtn.addEventListener("click", closeModal);
+
+finishBtn.addEventListener("click", () => {
+  closeModal();
+  switchToForm();
+});
+
+// Start validation process
+formEl.addEventListener("submit", validate);
 
 /**
  * launch modal form
@@ -37,9 +47,6 @@ function closeModal() {
   modalbg.style.display = "none";
   form.emptyAll();
 }
-
-
-
 
 // ********************************************************************************
 // Validation form part
@@ -61,55 +68,59 @@ function isEmpty(value) {
  * @returns { Boolean }
  */
 function isBetween(length, min, max) {
-  return   min > length || length > max ? false : true;
+  return min > length || length > max ? false : true;
 }
 
 /**
  * A "form" object that manages the validation of form fields and the display of errors.
  */
 const form = {
-  firstName : {
-    element : document.querySelector("#first"),
+  firstName: {
+    element: document.querySelector("#first"),
     get value() {
       return this.element.value.trim();
     },
     get valid() {
       if (isEmpty(this.value) || !isBetween(this.value.length, 2, 25)) {
-        this.message = "Veuillez entrer 2 caractères ou plus pour le champ du prénom.";
+        this.message =
+          "Veuillez entrer 2 caractères ou plus pour le champ du prénom.";
         return false;
       }
       return true;
-    }
+    },
   },
-  lastName : {
-    element : document.querySelector("#last"),
+  lastName: {
+    element: document.querySelector("#last"),
     get value() {
       return this.element.value.trim();
     },
     get valid() {
       if (isEmpty(this.value) || !isBetween(this.value.length, 2, 25)) {
-        this.message = "Veuillez entrer 2 caractères ou plus pour le champ du nom.";
+        this.message =
+          "Veuillez entrer 2 caractères ou plus pour le champ du nom.";
         return false;
       }
       return true;
-    }
+    },
   },
-  email : {
-    element : document.querySelector("#email"),
+  email: {
+    element: document.querySelector("#email"),
     get value() {
       return this.element.value.trim();
     },
     get valid() {
-      let regexEmail = new RegExp("^(\"(?:[!#-\[\]-~]|\\[\t -~])*\"|[!#-'*+\-/-9=?A-Z\^-~](?:\.?[!#-'*+\-/-9=?A-Z\^-~])*)@([!#-'*+\-/-9=?A-Z\^-~](?:\.?[!#-'*+\-/-9=?A-Z\^-~])*|\[[!-Z\^-~]*\])$");
+      let regexEmail = new RegExp(
+        "^(\"(?:[!#-[]-~]|\\[\t -~])*\"|[!#-'*+-/-9=?A-Z^-~](?:.?[!#-'*+-/-9=?A-Z^-~])*)@([!#-'*+-/-9=?A-Z^-~](?:.?[!#-'*+-/-9=?A-Z^-~])*|[[!-Z^-~]*])$"
+      );
       if (isEmpty(this.value) || !regexEmail.test(this.value)) {
         this.message = "Veuillez entrer une adresse email valide.";
         return false;
       }
       return true;
-    }
+    },
   },
-  birthdate : {
-    element : document.querySelector("#birthdate"),
+  birthdate: {
+    element: document.querySelector("#birthdate"),
     get value() {
       return this.element.value;
     },
@@ -119,10 +130,10 @@ const form = {
         return false;
       }
       return true;
-    }
+    },
   },
-  nbTournament : {
-    element : document.querySelector("#quantity"),
+  nbTournament: {
+    element: document.querySelector("#quantity"),
     get value() {
       return this.element.value;
     },
@@ -132,40 +143,41 @@ const form = {
         return false;
       }
       return true;
-    }
+    },
   },
-  cities : {
-    element : document.querySelector('input[type="radio"][name="location"]'),
-    elements : document.querySelectorAll('input[type="radio"][name="location"]'),
+  cities: {
+    element: document.querySelector('input[type="radio"][name="location"]'),
+    elements: document.querySelectorAll('input[type="radio"][name="location"]'),
     get value() {
       let tabV = [];
-      for(let i = 0; i < this.elements.length; i++) {
+      for (let i = 0; i < this.elements.length; i++) {
         tabV.push(this.elements[i].value);
       }
       return tabV;
     },
     get valid() {
-      for(let i = 0; i < this.elements.length; i++) {
+      for (let i = 0; i < this.elements.length; i++) {
         if (this.elements[i].checked) {
           return true;
         }
       }
       this.message = "Vous devez choisir une option.";
       return false;
-    }
+    },
   },
-  gtu : {
-    element : document.querySelector("#checkbox1"),
+  gtu: {
+    element: document.querySelector("#checkbox1"),
     get value() {
       return this.element.value;
     },
     get valid() {
       if (!this.element.checked) {
-        this.message = "Vous devez vérifier que vous acceptez les termes et conditions.";
+        this.message =
+          "Vous devez vérifier que vous acceptez les termes et conditions.";
         return false;
       }
       return true;
-    }
+    },
   },
   // New "valid" property that depends on the "valid" properties of internal objects
   get valid() {
@@ -191,7 +203,7 @@ const form = {
     return isValid; // If all internal properties are valid, "valid" is true
   },
   emptyAll() {
-    for(const key in this) {
+    for (const key in this) {
       if (this.hasOwnProperty(key) && key !== "valid" && key !== "emptyAll") {
         const field = this[key];
 
@@ -200,8 +212,8 @@ const form = {
       }
     }
     document.forms["reserve"].reset();
-  }
-}
+  },
+};
 // ********************************************************************************
 // End of validation form part
 // ********************************************************************************
@@ -211,7 +223,7 @@ const form = {
  * @param { Boolean } status
  */
 function displayFormData(status) {
-  for(let i = 0; i < formData.length; i++) {
+  for (let i = 0; i < formData.length; i++) {
     formData[i].hidden = status;
     // formData[i].style.visibility = "hidden";
   }
@@ -236,7 +248,8 @@ function hideMessage() {
   formEl.style.removeProperty("min-height");
   formEl.style.display = "block";
   formEl.style.removeProperty("flex-direction");
-  textLabel.innerHTML = "A quel tournoi souhaitez-vous participer cette année ?";
+  textLabel.innerHTML =
+    "A quel tournoi souhaitez-vous participer cette année ?";
   // textLabel.classList.toggle("success-text");
   textLabel.classList.remove("success-text");
 }
@@ -245,30 +258,19 @@ function hideMessage() {
  * Changes the style and behavior of the modal's buttons, to match its state
  */
 function btnsInMessage() {
-  submitBtn.value = "Fermer";
-  setTimeout(() => {
-    submitBtn.type = "button";
-    submitBtn.onclick = () => {
-      closeModal();
-      switchToForm();
-    };
-  }, 100);
+  submitBtn.style.display = "none";
+  finishBtn.style.display = "block";
   closeBtn.addEventListener("click", switchToForm);
   textLabel.style.marginTop = "auto";
-  submitBtn.style.marginTop = "auto";
 }
 
 /**
  * Resets the style and behavior of modal buttons to default
  */
 function btnsInForm() {
-  submitBtn.onclick = null;
-  submitBtn.value = "C'est parti";
+  submitBtn.style.display = "block";
+  finishBtn.style.display = "none";
   textLabel.style.removeProperty("margin-top");
-  submitBtn.style.marginTop = "20px";
-  setTimeout(() => {
-    submitBtn.type = "submit";
-  }, 100);
   closeBtn.removeEventListener("click", switchToForm);
 }
 
