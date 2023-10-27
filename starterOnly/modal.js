@@ -7,31 +7,6 @@ function editNav() {
   }
 }
 
-// DOM Elements
-const modalbg = document.querySelector(".bground");
-const modalBtn = document.querySelectorAll(".modal-btn");
-const formEl = document.forms["reserve"];
-const formData = document.querySelectorAll(".formData");
-const closeBtn = document.querySelector(".close");
-const submitBtn = document.querySelector(".btn-submit");
-const finishBtn = document.querySelector(".btn-finish");
-const textLabel = document.querySelector(".text-label");
-
-// submitBtn.addEventListener("click", validate);
-
-// launch modal event
-modalBtn.forEach((btn) => btn.addEventListener("click", launchModal));
-// close modal event
-closeBtn.addEventListener("click", closeModal);
-
-finishBtn.addEventListener("click", () => {
-  closeModal();
-  switchToForm();
-});
-
-// Start validation process
-formEl.addEventListener("submit", validate);
-
 /**
  * launch modal form
  */
@@ -43,10 +18,44 @@ function launchModal() {
  * Close modal form
  */
 function closeModal() {
-  console.log("closeModal()");
   modalbg.style.display = "none";
   form.emptyAll();
 }
+
+/**
+ * DOM Elements
+ */
+const modalbg = document.querySelector(".bground");
+const modalBtn = document.querySelectorAll(".modal-btn");
+const formEl = document.forms["reserve"];
+const formData = document.querySelectorAll(".formData");
+const closeBtn = document.querySelector(".close");
+const submitBtn = document.querySelector(".btn-submit");
+const finishBtn = document.querySelector(".btn-finish");
+const textLabel = document.querySelector(".text-label");
+
+/**
+ * add event to open the modal
+ */
+modalBtn.forEach((btn) => btn.addEventListener("click", launchModal));
+
+/**
+ * add event to close the modal
+ */
+closeBtn.addEventListener("click", closeModal);
+
+/**
+ * add event to close the modal after the thank you message
+ */
+finishBtn.addEventListener("click", () => {
+  closeModal();
+  switchToForm();
+});
+
+/**
+ * add event to start form verification
+ */
+formEl.addEventListener("submit", validate);
 
 // ********************************************************************************
 // Validation form part
@@ -59,14 +68,6 @@ function closeModal() {
 function isEmpty(value) {
   return value === "" ? true : false;
 }
-
-/**
- * Returns true if length is between min and max, returns false otherwise
- * @param { Number } length
- * @param { Number } min
- * @param { Number } max
- * @returns { Boolean }
- */
 
 /**
  * A "form" object that manages the validation of form fields and the display of errors.
@@ -182,13 +183,11 @@ const form = {
 
     for (const key in this) {
       if (this.hasOwnProperty(key) && key !== "valid" && key !== "emptyAll") {
-        // console.log(`key = ${key}, => ${key}.valid = ${this[key].valid}`);
         const field = this[key];
 
         // Check field validity and add/delete dataset attributes
         if (!field.valid) {
           isValid = false; // If a property is invalid, "valid" is false
-          // console.log(field);
           field.element.parentElement.dataset.error = field.message;
           field.element.parentElement.dataset.errorVisible = "true";
         } else {
@@ -222,7 +221,6 @@ const form = {
 function displayFormData(status) {
   for (let i = 0; i < formData.length; i++) {
     formData[i].hidden = status;
-    // formData[i].style.visibility = "hidden";
   }
 }
 
@@ -234,7 +232,6 @@ function showMessage() {
   formEl.style.display = "flex";
   formEl.style.flexDirection = "column";
   textLabel.innerHTML = "Merci pour<br>votre inscription";
-  // textLabel.classList.toggle("success-text");
   textLabel.classList.add("success-text");
 }
 
@@ -247,7 +244,6 @@ function hideMessage() {
   formEl.style.removeProperty("flex-direction");
   textLabel.innerHTML =
     "A quel tournoi souhaitez-vous participer cette année ?";
-  // textLabel.classList.toggle("success-text");
   textLabel.classList.remove("success-text");
 }
 
@@ -300,5 +296,4 @@ function validate(event) {
   if (form.valid) {
     switchToMessage();
   }
-  return console.log("validate fini");
 }
