@@ -67,9 +67,6 @@ function isEmpty(value) {
  * @param { Number } max
  * @returns { Boolean }
  */
-function isBetween(length, min, max) {
-  return min > length || length > max ? false : true;
-}
 
 /**
  * A "form" object that manages the validation of form fields and the display of errors.
@@ -81,7 +78,7 @@ const form = {
       return this.element.value.trim();
     },
     get valid() {
-      if (isEmpty(this.value) || !isBetween(this.value.length, 2, 25)) {
+      if (isEmpty(this.value) || this.value.length < 2) {
         this.message =
           "Veuillez entrer 2 caractères ou plus pour le champ du prénom.";
         return false;
@@ -95,7 +92,7 @@ const form = {
       return this.element.value.trim();
     },
     get valid() {
-      if (isEmpty(this.value) || !isBetween(this.value.length, 2, 25)) {
+      if (isEmpty(this.value) || this.value.length < 2) {
         this.message =
           "Veuillez entrer 2 caractères ou plus pour le champ du nom.";
         return false;
